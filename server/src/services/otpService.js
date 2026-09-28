@@ -1,4 +1,4 @@
-import axios from "axios";
+import emailjs from "@emailjs/nodejs";
 import bcrypt from "bcryptjs";
 
 export const generate6DigitOTP = () => {
@@ -26,37 +26,27 @@ export const sendOTPEmail = async (email, otp, userName = "") => {
 
   console.log(`[EmailJS] Sending OTP to ${email}...`);
 
-  const payload = {
-    service_id: serviceId,
-    template_id: templateId,
-    user_id: publicKey,
-    accessToken: privateKey,
-    template_params: {
-      user_name: userName || email,
-      otp: otp,
-      email: email,
-    },
+  const templateParams = {
+    user_name: userName || email,
+    otp: otp,
+    email: email,
   };
 
   try {
-    const response = await axios.post(
-      "https://api.emailjs.com/api/v1.0/email/send",
-      payload,
+    const response = await emailjs.send(
+      serviceId,
+      templateId,
+      templateParams,
       {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        publicKey: publicKey,
+        privateKey: privateKey,
       }
     );
 
-    if (response.status === 200 || response.data === "OK") {
-      console.log("[EmailJS] OTP email sent successfully.");
-      return { success: true, data: response.data };
-    } else {
-      throw new Error(`EmailJS responded with status ${response.status}: ${JSON.stringify(response.data)}`);
-    }
+    console.log("[EmailJS] OTP email sent successfully.");
+    return { success: true, data: response };
   } catch (err) {
-    const errMsg = err.response?.data ? JSON.stringify(err.response.data) : err.message;
+    const errMsg = err?.text || err?.message || JSON.stringify(err);
     console.error("[EmailJS] Error sending email:", errMsg);
     throw new Error(`Failed to send OTP email via EmailJS: ${errMsg}`);
   }
