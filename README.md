@@ -1,86 +1,617 @@
-# MailCraft AI — AI Email Reply Assistant (Phase 1)
+# 🤖 ReplyWise AI — AI-Powered Email Assistant
 
-Production-ready React scaffold for an AI-powered email reply assistant.
+> A full-stack AI-powered email assistant for generating professional, context-aware email replies with personalized preferences, secure authentication, email OTP verification, and reply history.
 
-## Stack
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)
+![TiDB](https://img.shields.io/badge/TiDB-Cloud-00A98F)
+![OpenRouter](https://img.shields.io/badge/OpenRouter-AI-6366F1)
+![EmailJS](https://img.shields.io/badge/EmailJS-OTP-FF6B6B)
+![Firebase](https://img.shields.io/badge/Firebase-Hosting-FFCA28?logo=firebase)
+![Render](https://img.shields.io/badge/Render-Backend-46E3B7?logo=render)
 
-- **React 19** + **Vite**
-- **Tailwind CSS** v4 (via `@tailwindcss/vite`)
-- **React Router DOM** v7
-- **Firebase SDK** (scaffold only)
-- **Framer Motion**
-- **React Icons**
-- **React Hot Toast**
+**Live Application:** https://replywise-4i.web.app
 
-## Project Structure
+**Backend API:** https://replywise-ai.onrender.com
 
+**Repository:** https://github.com/SaiVishwanathV/replywise-ai
+
+---
+
+# 📖 Overview
+
+ReplyWise AI is a full-stack web application that helps users generate professional and context-aware email replies using Artificial Intelligence.
+
+The application provides a dedicated workspace where users can enter email content, customize response preferences, and generate AI-powered replies.
+
+It also includes user authentication, email verification through a 6-digit OTP, personalized preferences, reply history, and profile management.
+
+The application uses different cloud platforms for different responsibilities:
+
+- **Firebase Hosting** for the frontend
+- **Render** for the backend
+- **TiDB Cloud** for the production database
+- **EmailJS** for OTP email delivery
+- **OpenRouter** for AI API access
+- **GitHub** for source control
+
+---
+
+# ✨ Key Highlights
+
+- 🤖 AI-powered email reply generation
+- 📝 Context-aware professional responses
+- 🎨 Custom reply tone and length
+- 🌐 Preferred language selection
+- 🔐 JWT-based authentication
+- 👤 Login using email or username
+- 📧 6-digit email OTP verification
+- 🔒 Password hashing using bcrypt
+- 🗂 Reply history
+- 👤 Profile and preference management
+- 🛡 Protected backend API routes
+- ☁ Production cloud deployment
+- 📱 Responsive modern interface
+- ⚡ React + Vite frontend
+- 🚀 Node.js + Express backend
+
+---
+
+# 🏗 Tech Stack
+
+| Category | Technology | Purpose |
+|----------|------------|---------|
+| Frontend | React | User interface and application components |
+| Build Tool | Vite | Frontend development and production builds |
+| Styling | Tailwind CSS | Responsive UI styling |
+| Routing | React Router | Client-side navigation |
+| Backend | Node.js | Server-side JavaScript runtime |
+| API | Express.js | REST API and backend logic |
+| ORM | Prisma | Database access and schema management |
+| Database | TiDB Cloud | Production relational database |
+| Database Compatibility | MySQL | Relational database compatibility |
+| Authentication | JWT | Access and refresh token authentication |
+| Password Security | bcrypt | Secure password hashing |
+| OTP Delivery | EmailJS | Email verification OTP delivery |
+| AI Integration | OpenRouter | AI API access |
+| Frontend Hosting | Firebase Hosting | React application hosting |
+| Backend Hosting | Render | Node.js backend hosting |
+| Version Control | Git + GitHub | Source control |
+
+---
+
+# 🏗 System Architecture
+
+```text
+                         ┌─────────────────────┐
+                         │        User         │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │   React + Vite      │
+                         │     Frontend        │
+                         └──────────┬──────────┘
+                                    │
+                               REST API
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │ Node.js + Express   │
+                         │      Backend        │
+                         └──────┬───────┬──────┘
+                                │       │
+                    ┌───────────┘       └────────────┐
+                    ▼                                ▼
+           ┌─────────────────┐              ┌─────────────────┐
+           │   TiDB Cloud    │              │   OpenRouter    │
+           │    Database     │              │     AI API      │
+           └─────────────────┘              └─────────────────┘
+                    │
+                    ▼
+           ┌─────────────────┐
+           │     EmailJS     │
+           │   OTP Delivery  │
+           └─────────────────┘
 ```
-src/
-  assets/icons|images|illustrations
-  components/common  (Button, Card, Loader, EmptyState)
-  components/layout  (Navbar, Sidebar, Footer, PageLayout)
-  components/email   (EmailInput, ReplyCard, SummaryCard, ToneSelector, LengthSelector)
-  components/ui      (ThemeToggle, SearchBar, PageHeader)
-  pages              (Landing, Login, Signup, Dashboard, Workspace, HistoryDetails, Profile, Settings, NotFound)
-  context            (AuthContext, ThemeContext)
-  firebase           (firebase.js, auth.js, firestore.js)
-  services           (geminiService, historyService, summaryService)
-  hooks              (useAuth, useTheme)
-  routes             (AppRoutes, ProtectedRoute)
-  utils              (constants, helpers, formatDate)
+
+---
+
+# 🔄 Application Flow
+
+## User Registration & Verification
+
+```text
+User
+ │
+ ▼
+Signup Form
+ │
+ ▼
+Express Backend
+ │
+ ├── Validate User Details
+ │
+ ├── Create User
+ │
+ ├── Generate 6-Digit OTP
+ │
+ └── Hash OTP
+ │
+ ▼
+TiDB Cloud
+ │
+ ▼
+EmailJS
+ │
+ ▼
+User's Email
+ │
+ ▼
+Enter OTP
+ │
+ ▼
+Express Backend
+ │
+ ├── Hash Submitted OTP
+ │
+ └── Compare With Stored Hash
+ │
+ ▼
+Email Verified
+ │
+ ▼
+Account Activated
 ```
 
-## Routes
+---
 
-| Path | Page | Protected |
-|------|------|-----------|
-| `/` | Landing | No |
-| `/login` | Login | No |
-| `/signup` | Signup | No |
-| `/dashboard` | Dashboard | Yes (scaffold: always allows) |
-| `/workspace` | Workspace | Yes |
-| `/history/:id` | HistoryDetails | Yes |
-| `/profile` | Profile | Yes |
-| `/settings` | Settings | Yes |
-| `*` | NotFound | No |
+# 🔐 Authentication
 
-## Getting Started
+ReplyWise AI uses backend-based authentication with JWT access and refresh tokens.
+
+Users can log in using:
+
+- Email address
+- Username
+
+### Authentication Flow
+
+```text
+User
+  │
+  ▼
+Login
+  │
+  ▼
+Express Backend
+  │
+  ├── Find User
+  ├── Verify Password
+  └── Check Account Status
+  │
+  ▼
+JWT Access Token
+  │
+  ▼
+Refresh Token
+  │
+  ▼
+Authenticated Application
+```
+
+Passwords are hashed using **bcrypt** before being stored.
+
+---
+
+# 📧 Email OTP Verification
+
+EmailJS is used specifically for sending account verification emails.
+
+The actual OTP generation and verification logic is handled by the backend.
+
+### OTP Workflow
+
+1. User submits the signup form.
+2. Backend generates a random 6-digit OTP.
+3. OTP is hashed before storage.
+4. OTP information is stored in the database.
+5. EmailJS sends the OTP to the user's email.
+6. User enters the received OTP.
+7. Backend hashes the submitted OTP.
+8. The hashes are compared.
+9. A valid OTP verifies the user's email.
+10. The OTP record is removed after successful verification.
+11. The account becomes active.
+
+---
+
+# 🤖 AI Email Reply Generation
+
+ReplyWise AI uses **OpenRouter** as the AI API layer.
+
+The backend receives the user's email content and selected preferences, prepares the AI request, and sends it to OpenRouter.
+
+```text
+User
+ │
+ ▼
+ReplyWise Workspace
+ │
+ ▼
+Enter Email Content
+ │
+ ▼
+Select Preferences
+ │
+ ▼
+React Frontend
+ │
+ ▼
+Express REST API
+ │
+ ▼
+AI Prompt Processing
+ │
+ ▼
+OpenRouter
+ │
+ ▼
+AI Model
+ │
+ ▼
+Generated Email Reply
+ │
+ ▼
+Express Backend
+ │
+ ▼
+React Frontend
+ │
+ ▼
+User
+```
+
+The OpenRouter API key is stored on the backend and is never exposed to the frontend.
+
+---
+
+# 🎯 Personalization
+
+Users can configure how ReplyWise generates email responses.
+
+Available preferences include:
+
+- **Reply Tone**
+- **Reply Length**
+- **Preferred Language**
+
+These preferences are included when preparing the AI prompt so that generated responses better match the user's selected writing style.
+
+---
+
+# 🗂 Reply History
+
+ReplyWise stores generated replies so users can access previous responses through the History section.
+
+The history system allows users to:
+
+- Review previous AI-generated replies
+- Access their previous responses
+- Maintain a record of generated email content
+
+---
+
+# 🗄 Database Architecture
+
+TiDB Cloud is used as the production relational database.
+
+Prisma provides the database access layer between the Node.js backend and TiDB Cloud.
+
+```text
+Node.js + Express
+        │
+        ▼
+      Prisma
+        │
+        ▼
+   TiDB Cloud
+```
+
+The database stores application information such as:
+
+- User accounts
+- Authentication information
+- Email verification data
+- User preferences
+- Reply history
+- Application records
+
+---
+
+# 🌐 Platform Responsibilities
+
+ReplyWise AI uses specialized platforms for different application responsibilities.
+
+| Platform | Responsibility |
+|----------|----------------|
+| Firebase Hosting | Frontend hosting |
+| Render | Backend hosting |
+| TiDB Cloud | Production database |
+| EmailJS | OTP email delivery |
+| OpenRouter | AI API integration |
+| GitHub | Source control |
+
+This architecture keeps the major application components separated and independently managed.
+
+---
+
+# 🚀 Deployment Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │   Firebase Hosting   │
+                    │    React Frontend    │
+                    └──────────┬───────────┘
+                               │
+                               │ REST API
+                               ▼
+                    ┌──────────────────────┐
+                    │       Render         │
+                    │ Node.js + Express    │
+                    │      Backend         │
+                    └───────┬──────┬───────┘
+                            │      │
+                 ┌──────────┘      └──────────┐
+                 ▼                            ▼
+          ┌──────────────┐             ┌──────────────┐
+          │ TiDB Cloud   │             │  OpenRouter  │
+          │  Database    │             │     AI       │
+          └──────────────┘             └──────────────┘
+
+                            │
+                            ▼
+                     ┌──────────────┐
+                     │    EmailJS   │
+                     │  OTP Email   │
+                     └──────────────┘
+```
+
+---
+
+# 📱 User Interface
+
+ReplyWise AI uses a clean, minimal interface designed for a modern productivity experience.
+
+### UI Principles
+
+- Clean light theme
+- Minimal navigation
+- Soft card-based layouts
+- Rounded components
+- Subtle shadows
+- Blue accent colors
+- Responsive design
+- Reduced visual clutter
+- Consistent spacing and typography
+
+---
+
+# 📄 Main Application Pages
+
+| Page | Purpose |
+|------|---------|
+| Landing | Introduction to ReplyWise AI |
+| Login | User authentication |
+| Signup | Account registration |
+| Email Verification | OTP verification |
+| Dashboard | Application overview |
+| ReplyWise Workspace | AI email reply generation |
+| History | Previously generated replies |
+| Profile | Account and preference management |
+
+---
+
+# 📂 Project Structure
+
+```text
+replywise-ai/
+│
+├── client/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── ...
+│   │
+│   ├── firebase.json
+│   ├── .firebaserc
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
+├── server/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── server.js
+│   │
+│   ├── prisma/
+│   ├── package.json
+│   └── ...
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+# 🔒 Security Design
+
+| Security Feature | Implementation |
+|------------------|----------------|
+| Password Storage | bcrypt hashing |
+| Authentication | JWT access + refresh tokens |
+| Email Verification | 6-digit OTP |
+| OTP Storage | Hashed OTP |
+| API Security | Protected backend routes |
+| AI Credentials | Backend environment variables |
+| EmailJS Private Key | Backend environment variables |
+| Database Credentials | Backend environment variables |
+| Source Control | Sensitive `.env` files excluded |
+
+Sensitive API credentials are never included in the frontend application.
+
+---
+
+# 🌍 Production URLs
+
+### Frontend
+
+https://replywise-4i.web.app
+
+### Backend
+
+https://replywise-ai.onrender.com
+
+### GitHub Repository
+
+https://github.com/SaiVishwanathV/replywise-ai
+
+---
+
+# ⚙️ Installation
+
+## Clone Repository
 
 ```bash
+git clone https://github.com/SaiVishwanathV/replywise-ai.git
+
+cd replywise-ai
+```
+
+---
+
+## Backend Setup
+
+```bash
+cd server
 npm install
+```
+
+Create a `.env` file inside the `server` directory and configure the required backend environment variables.
+
+Generate Prisma Client:
+
+```bash
+npx prisma generate
+```
+
+Start the backend:
+
+```bash
+npm start
+```
+
+---
+
+## Frontend Setup
+
+Open another terminal:
+
+```bash
+cd client
+npm install
+```
+
+Configure the required frontend environment variables in `.env`.
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Env vars are not required in Phase 1 — see `.env.example` for upcoming keys.
+The frontend will run using the Vite development server.
 
-## Theme
+---
 
-Light/Dark toggle via `ThemeContext` — persists in `localStorage`, applies `dark` class on `<html>`.
+# ☁️ Production Deployment
 
-## Notes
+## Frontend
 
-- Phase 1 is scaffold only — no AI or Firebase logic.
-- `ProtectedRoute` currently always allows navigation.
-- Firebase files export placeholders.
+The React frontend is deployed using Firebase Hosting.
 
+```text
+React + Vite
+      ↓
+Production Build
+      ↓
+Firebase Hosting
+      ↓
+replywise-4i.web.app
+```
 
+## Backend
 
+The Node.js + Express backend is deployed using Render.
 
+```text
+Node.js + Express
+        ↓
+      GitHub
+        ↓
+      Render
+        ↓
+replywise-ai.onrender.com
+```
 
-Phase 2 complete — Landing page rebuilt as ReplyWise AI productivity SaaS (src/pages/Landing.jsx:1). Verified vite build ✓ and vite dev 200 OK.
-Branding: Renamed MailCraft AI → ReplyWise AI (src/utils/constants.js:1, index.html:7, src/components/layout/Navbar.jsx:1, src/components/layout/Footer.jsx:1).
-Design shift: Removed violet/fuchsia/neon gradients, glassmorphism, blobs. Now white #fcfcfd (dark slate-950), indigo-600 accent only, rounded-xl/2xl, soft shadows, Inter font (src/index.css:1). Button.jsx:1 primary now solid indigo.
-Navbar (src/components/layout/LandingNavbar.jsx:1): Sticky, shadow on scroll (window.scrollY > 8), left mail icon + text, center desktop links (Features/How It Works/FAQ with smooth scroll offset 72px), right Login/Get Started + ThemeToggle, Framer Motion mobile drawer. Footer (src/components/layout/LandingFooter.jsx:1): 3 columns (Product/Company/Resources) + bottom line © 2026 ReplyWise AI. Built with React and Firebase.
-Landing sections in order (all in src/pages/Landing.jsx:1):
-1. Hero — two-col, left headline Write Better Emails in Seconds. + Get Started/Live Demo + React/Firebase/Gemini badges, right static email preview + AI reply (indigo border, no glow)
-2. Features — 2×3 grid via src/components/common/FeatureCard.jsx:1 (6 items, hover elevation only)
-3. How It Works — 3 src/components/common/StepCard.jsx:1 with desktop connecting line, vertical stack mobile
-4. Preview — two cards Original/Generated with Professional badge + Copy/Save UI-only buttons
-5. Summarizer — left long email + right 4 bordered containers (Summary/Key Points/Action Items/Deadline)
-6. Tone Showcase — 10 src/components/common/ToneChip.jsx:1 chips (Professional…Empathetic), selected state → indigo, preview text switches per tone
-7. FAQ — src/components/common/FAQAccordion.jsx:1 (5 questions, AnimatePresence height animation, single-open)
-8. CTA — centered bordered card via src/components/common/CTASection.jsx:1
-9. Footer above
-Animations: Reveal wrapper (fade+slide 0.45s), accordion rotate, subtle hover only — no heavy/particle effects. All buttons route to /signup//workspace placeholders; dark mode via existing ThemeContext.
-Reusable components added: FeatureCard, StepCard, ToneChip, FAQAccordion, EmailPreviewCard, CTASection, LandingNavbar, LandingFooter.
-▣  Build · Muse Spark 1.2 Free · 6m 50s
+## Database
+
+Production application data is stored in TiDB Cloud.
+
+## Email
+
+Email verification OTPs are delivered using EmailJS.
+
+## AI
+
+AI response generation is handled through OpenRouter.
+
+---
+
+# 🔮 Future Enhancements
+
+- Gmail integration
+- Outlook integration
+- Direct email sending
+- Browser extension
+- Additional AI models
+- Advanced email templates
+- Usage analytics
+- Pro subscription features
+- Additional productivity integrations
+
+---
+
+# 👨‍💻 Author
+
+**V Sai Vishwanath**
+
+B.Tech — Computer Science & Engineering  
+Mahatma Gandhi Institute of Technology (MGIT), Hyderabad
+
+**GitHub:**  
+https://github.com/SaiVishwanathV
+
+---
+
+## ⭐ ReplyWise AI
+
+**React • Node.js • Express • Prisma • TiDB Cloud • OpenRouter • EmailJS • Firebase • Render**
